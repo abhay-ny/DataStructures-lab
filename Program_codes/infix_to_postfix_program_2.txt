@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#define size 20
+
+struct stack 
+{
+    int top;
+    char data[size];
+};
+
+typedef struct stack STACK;
+
+void push(STACK*S, char item)
+{
+    S-> data[++(S-> top)]=item;
+}
+
+char pop(STACK*S)
+{
+    return S-> data[(S->top)--];
+}
+
+int preced(char symbol)
+{
+    switch (symbol)
+    {
+        case '^' : return 3;
+        case'*' :
+        case'/' : return 2;
+        case'+' : 
+        case'-' : return 1;
+        default : return 0;
+    }
+}
+
+void infixtopostfix(char infix[10], STACK*S)
+{
+    char postfix[10],symbol,temp;
+    int a,b=0;
+    for(a=0;infix[a]!='\0';a++)
+    {
+        symbol=infix[a];
+        if(isalnum(symbol)){
+            postfix[b++]=symbol;
+        }else{
+            switch(symbol){
+                case'(': push(S,symbol);
+                        break;
+                case')': temp = pop(S);
+                        while(temp!='(')
+                        {
+                            postfix[b++]=temp;
+                            temp=pop(S);
+                        }
+                    break;
+                case '+' :
+                case '-' :
+                case '*' :
+                case '/' :
+                case '^' : while (S->top != -1 && preced(S->data[S->top]) >= preced(symbol) && S->data[S->top] != '('){
+                        postfix[b++] = pop(S);
+                    }
+                    push(S, symbol);
+                    break;
+            }
+        }
+    }
+        while (S->top != -1) {
+        postfix[b++] = pop(S);
+    }
+    postfix[b] = '\0';
+    printf("\nPostfix expression is: %s\n", postfix);
+}
+int main ()
+{
+    char infix[10];
+    STACK S;
+    S.top=-1;
+    printf("\n read infix to expression");
+    scanf("%s",infix);
+    infixtopostfix(infix,&S);
+    return 0;
+}
