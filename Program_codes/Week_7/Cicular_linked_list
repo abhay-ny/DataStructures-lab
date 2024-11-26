@@ -1,0 +1,136 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node* addr;
+};
+typedef struct node* NODE;
+
+NODE insertbegin(NODE last,int item){
+    NODE temp;
+    temp=(NODE)malloc(sizeof(struct node));
+    if(last==NULL)
+    {
+        temp->addr=temp;
+        return temp;
+    }
+    temp->addr=last->addr;
+    last->addr=temp;
+    return last;
+}
+
+NODE insertend(NODE last,int item){
+    NODE temp;
+    temp=(NODE)malloc(sizeof(struct node));
+    if(last==NULL);
+    {
+        temp->addr=temp;
+        return temp;
+    }
+    temp->addr=last->addr;
+    last->addr=temp;
+    return temp;
+}
+
+NODE deletebegin(NODE last){
+    NODE temp;
+    if(last==NULL){
+        printf("list is empty");
+        return NULL;
+    }
+    if(last->addr==last){
+        printf("node deleted is %d",last->data);
+        free (last);
+        return NULL;
+    }
+    temp=last->addr;
+    last->addr=temp->addr;
+    printf("node deleted is %d",temp->data);
+    free(temp);
+    return last;
+}
+
+NODE deleteend(NODE last){
+    NODE cur;
+    if(last==NULL){
+        printf("list is empty");
+        return NULL;
+    }
+    if(last->addr==last){
+        printf("node deleted is %d",last->data);
+        free(last);
+        return NULL;
+    }
+    cur = last->addr;
+    while(cur->addr!=last)
+        cur=cur->addr;
+    cur->addr=last->addr;
+    printf("node deleted is %d",last->data);
+    free(last);
+    return cur;
+}
+
+void display(NODE last){
+    NODE temp;
+    if(last==NULL){
+        printf("list is empty");
+    }
+    else{
+        printf("list content are");
+        temp=last->addr;
+        while(temp!=last)
+        {
+            printf("%d \t",temp->data);
+            temp=temp->addr;
+        }
+        printf("%d \t",temp->data);
+    }
+}
+
+int main() {
+    NODE last=NULL;
+    int ch,item;
+    
+    while (1) {
+        printf("1: Insert at Beginning  2: Insert at End  3: Delete at Beginning  4: Delete at End 8: Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                printf("Enter the element to insert: ");
+                scanf("%d", &item);
+                last = insertbegin(last, item);
+                break;
+
+            case 2:
+                printf("Enter the element to insert: ");
+                scanf("%d", &item);
+                last = insertend(last, item);
+                break;
+
+            case 3:
+                last = deletebegin(last);
+                break;
+
+            case 4:
+                last = deleteend(last);
+                break;
+
+            case 5:
+                display(last);
+                break;
+
+            case 6:
+                exit(0); // Exit the program
+                break;
+
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
+
