@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure of a node in the binary search tree
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// Function to create a new node with the given data
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a node in the binary search tree
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+    
+    // If data is smaller, insert in the left subtree
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    }
+    // If data is larger, insert in the right subtree
+    else {
+        root->right = insert(root->right, data);
+    }
+    
+    return root;
+}
+
+// In-order traversal (Left, Root, Right)
+void inorderTraversal(struct Node* root) {
+    if (root != NULL) {
+        inorderTraversal(root->left);
+        printf("%d ", root->data);
+        inorderTraversal(root->right);
+    }
+}
+
+// Pre-order traversal (Root, Left, Right)
+void preorderTraversal(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+    }
+}
+
+// Post-order traversal (Left, Right, Root)
+void postorderTraversal(struct Node* root) {
+    if (root != NULL) {
+        postorderTraversal(root->left);
+        postorderTraversal(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Function to display the tree elements
+void displayTree(struct Node* root) {
+    if (root == NULL) {
+        printf("Tree is empty.\n");
+        return;
+    }
+    
+    printf("\nIn-order traversal: ");
+    inorderTraversal(root);
+    
+    printf("\nPre-order traversal: ");
+    preorderTraversal(root);
+    
+    printf("\nPost-order traversal: ");
+    postorderTraversal(root);
+    printf("\n");
+}
+
+// Main function to drive the program
+int main() {
+    struct Node* root = NULL;
+    int choice, data;
+    
+    while (1) {
+        // Menu for the operations
+        printf("\nBinary Search Tree Operations:\n");
+        printf("1. Insert node\n");
+        printf("2. Display tree (in-order, pre-order, post-order)\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                // Insert a node
+                printf("Enter the value to insert: ");
+                scanf("%d", &data);
+                root = insert(root, data);
+                printf("Node with value %d inserted.\n", data);
+                break;
+                
+            case 2:
+                // Display tree traversals
+                displayTree(root);
+                break;
+                
+            case 3:
+                // Exit the program
+                printf("Exiting the program.\n");
+                exit(0);
+                
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+    
+    return 0;
+}
