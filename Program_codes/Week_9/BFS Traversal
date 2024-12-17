@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100  // Maximum number of vertices in the graph
+
+// Function to perform BFS
+void bfs(int graph[MAX][MAX], int visited[MAX], int start, int vertices) {
+    int queue[MAX], front = 0, rear = 0;
+    queue[rear++] = start;  // Enqueue the starting vertex
+    visited[start] = 1;     // Mark the starting vertex as visited
+
+    printf("BFS Traversal: ");
+    
+    while (front < rear) {
+        int current = queue[front++];  // Dequeue a vertex
+        printf("%d ", current);
+
+        // Check all adjacent vertices
+        for (int i = 0; i < vertices; i++) {
+            if (graph[current][i] == 1 && !visited[i]) {
+                queue[rear++] = i;  // Enqueue the adjacent vertex
+                visited[i] = 1;     // Mark as visited
+            }
+        }
+    }
+
+    printf("\n");
+}
+
+int main() {
+    int graph[MAX][MAX], visited[MAX];
+    int vertices, edges, startVertex;
+
+    // Initialize visited array to 0
+    for (int i = 0; i < MAX; i++) {
+        visited[i] = 0;
+    }
+
+    printf("Enter the number of vertices: ");
+    scanf("%d", &vertices);
+
+    // Initialize graph with 0s
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            graph[i][j] = 0;
+        }
+    }
+
+    printf("Enter the number of edges: ");
+    scanf("%d", &edges);
+
+    printf("Enter the edges (format: start end):\n");
+    for (int i = 0; i < edges; i++) {
+        int start, end;
+        scanf("%d %d", &start, &end);
+        graph[start][end] = 1;  // Add edge
+        graph[end][start] = 1;  // For undirected graph, also add the reverse edge
+    }
+
+    printf("Enter the starting vertex: ");
+    scanf("%d", &startVertex);
+
+    bfs(graph, visited, startVertex, vertices);
+
+    return 0;
+}
